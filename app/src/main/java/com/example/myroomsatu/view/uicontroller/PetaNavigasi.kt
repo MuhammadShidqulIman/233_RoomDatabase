@@ -23,3 +23,14 @@ fun HostNavigasi(
 ) {
     NavHost(navController = navController, startDestination = DestinasiHome.route, modifier = modifier) {
 
+        composable(route = DestinasiHome.route) {
+            HomeScreen(
+                navigateToItemEntry = { navController.navigate(route = DestinasiEntry.route) },
+            )
+        }
+
+        composable(route = DestinasiEntry.route) {
+            EntrySiswaScreen(navigateBack = { navController.popBackStack() })
+        }
+    }
+}
