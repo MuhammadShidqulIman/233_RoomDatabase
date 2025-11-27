@@ -8,7 +8,6 @@ import com.example.myroomsatu.repositori.RepositoriSiswa
 import com.example.myroomsatu.room.Siswa
 
 class EntryViewModel(private val repositoriSiswa: RepositoriSiswa): ViewModel() {
-
     var uiStateSiswa by mutableStateOf(value = UIStateSiswa())
         private set
 
@@ -21,7 +20,7 @@ class EntryViewModel(private val repositoriSiswa: RepositoriSiswa): ViewModel() 
 
     fun updateUIState(detailSiswa: DetailSiswa) {
         uiStateSiswa =
-            UIState_Siswa(detailSiswa = detailSiswa, isEntryValid = validasiInput(detailSiswa))
+            UIStateSiswa(detailSiswa = detailSiswa, isEntryValid = validasiInput(detailSiswa))
     }
 
     suspend fun saveSiswa() {
@@ -30,7 +29,6 @@ class EntryViewModel(private val repositoriSiswa: RepositoriSiswa): ViewModel() 
         }
     }
 }
-
 data class UIStateSiswa(
     val detailSiswa: DetailSiswa = DetailSiswa(),
     val isEntryValid: Boolean = false
@@ -50,7 +48,8 @@ fun DetailSiswa.toSiswa(): Siswa = Siswa(
     telpon = telpon
 )
 
-fun Siswa.toUIStateSiswa(isEntryValid: Boolean = false): UIState_Siswa = UIState_Siswa(
+
+fun Siswa.toUIStateSiswa(isEntryValid: Boolean = false): UIStateSiswa = UIStateSiswa(
     detailSiswa = this.toDetailSiswa(),
     isEntryValid = isEntryValid
 )

@@ -7,12 +7,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myroomsatu.view.EntrySiswaScreen
+import com.example.myroomsatu.view.HomeScreen
 import com.example.myroomsatu.view.route.DestinasiEntry
 import com.example.myroomsatu.view.route.DestinasiHome
 
 @Composable
-fun SiswaApp(navController: NavHostController = rememberNavController(), modifier: Modifier) {
-    HostNavigasi(navController = navController)
+fun SiswaApp(navController: NavHostController = rememberNavController(), modifier: Modifier = Modifier) {
+
+    HostNavigasi(navController = navController, modifier = modifier)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,11 +24,20 @@ fun HostNavigasi(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    NavHost(navController = navController, startDestination = DestinasiHome.route, modifier = modifier) {
+    NavHost(
+        navController = navController,
+        startDestination = DestinasiHome.route,
+        modifier = modifier
+    ) {
 
         composable(route = DestinasiHome.route) {
             HomeScreen(
                 navigateToItemEntry = { navController.navigate(route = DestinasiEntry.route) },
+
+                navigateToItemDetail = { id ->
+
+                    navController.navigate(route = DestinasiEntry.route)
+                }
             )
         }
 

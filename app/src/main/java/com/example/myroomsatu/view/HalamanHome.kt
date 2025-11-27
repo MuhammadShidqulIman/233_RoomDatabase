@@ -1,5 +1,6 @@
 package com.example.myroomsatu.view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,29 +18,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextAlign
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.dimensionResource
+import com.example.myroomsatu.R
 import com.example.myroomsatu.room.Siswa
 import com.example.myroomsatu.view.route.DestinasiHome
 import com.example.myroomsatu.viewmodel.HomeViewModel
+import com.example.myroomsatu.viewmodel.provider.PenyediaViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
+    navigateToItemDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ){
@@ -58,11 +63,11 @@ fun HomeScreen(
             FloatingActionButton(
                 onClick = navigateToItemEntry,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(all = dimensionResource(id = 20dp))
+                modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_large))
             ){
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = stringResource("Tambah Siswa")
+                    contentDescription = stringResource(R.string.entry_siswa)
                 )
             }
         }
@@ -70,6 +75,7 @@ fun HomeScreen(
         val uiStateSiswa by viewModel.homeUiState.collectAsState()
         BodyHome(
             itemSiswa = uiStateSiswa.listSiswa,
+            onItemClick = navigateToItemDetail,
             modifier = Modifier
                 .padding(paddingValues = innerPadding)
                 .fillMaxSize()
@@ -80,6 +86,7 @@ fun HomeScreen(
 @Composable
 fun BodyHome(
     itemSiswa: List<Siswa>,
+    onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -88,14 +95,16 @@ fun BodyHome(
     ){
         if(itemSiswa.isEmpty()){
             Text(
-                text = stringResource("Tidak ada data Siswa. Tap + untuk menambah data"),
+                text = stringResource(R.string.deskripsi_no_item),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_medium))
             )
         } else {
             ListSiswa(
                 itemSiswa = itemSiswa,
-                modifier = Modifier.padding(horizontal = dimensionResource(id = 8dp))
+                onItemClick = onItemClick,
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
         }
     }
@@ -104,14 +113,16 @@ fun BodyHome(
 @Composable
 fun ListSiswa(
     itemSiswa: List<Siswa>,
+    onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
-    LazyColumn(modifier = Modifier){
+    LazyColumn(modifier = modifier){
         items(items = itemSiswa, key = { it.id }){
                 person -> DataSiswa(
             siswa = person,
+            onItemClick = onItemClick,
             modifier = Modifier
-                .padding(all = dimensionResource(id = 8dp))
+                .padding(all = dimensionResource(id = R.dimen.padding_small))
         )
         }
     }
@@ -120,15 +131,18 @@ fun ListSiswa(
 @Composable
 fun DataSiswa(
     siswa: Siswa,
+    onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable { onItemClick(siswa.id) },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ){
         Column(
-            modifier = Modifier.padding(all = dimensionResource(id = 20dp)),
-            verticalArrangement = Arrangement.spacedBy(space = dimensionResource(id = 8dp))
+            modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_large)),
+            verticalArrangement = Arrangement.spacedBy(
+                space = dimensionResource(id = R.dimen.padding_small)
+            )
         ){
             Row(
                 modifier = Modifier.fillMaxWidth()

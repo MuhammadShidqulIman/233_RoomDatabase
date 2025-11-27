@@ -1,15 +1,19 @@
-package com.example.myroomsatu.repositori
+package com.example.myroomsatu
 
 import android.app.Application
 import android.content.Context
+import com.example.myroomsatu.repositori.RepositoriSiswa
+import com.example.myroomsatu.repositori.OfflineRepositoriSiswa
 import com.example.myroomsatu.room.DatabaseSiswa
 
-interface ContainerApp {
+
+interface AppContainer {
     val repositoriSiswa : RepositoriSiswa
 }
 
-class ContainerDataApp(private val context: Context) :
-    ContainerApp {
+
+class AppContainerImpl(private val context: Context) :
+    AppContainer {
 
     override val repositoriSiswa: RepositoriSiswa by lazy {
         OfflineRepositoriSiswa(
@@ -18,15 +22,13 @@ class ContainerDataApp(private val context: Context) :
     }
 }
 
-class AplikasiSiswa : Application() {
+class ContainerApp : Application() {
 
-    /**
-     * AppContainer instance digunakan oleh kelas-kelas lainnya untuk mendapatkan dependensi
-     */
-    lateinit var container: ContainerApp
+
+    lateinit var container: AppContainer
 
     override fun onCreate() {
         super.onCreate()
-        container = ContainerDataApp(this)
+        container = AppContainerImpl(this)
     }
 }
