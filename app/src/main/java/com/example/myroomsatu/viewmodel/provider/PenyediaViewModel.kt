@@ -28,9 +28,6 @@ object PenyediaViewModel {
             )
         }
 
-
-
-
         initializer {
 
             EntryViewModel(
