@@ -28,10 +28,12 @@ class EntryViewModel(private val repositoriSiswa: RepositoriSiswa): ViewModel() 
             repositoriSiswa.insertSiswa(siswa = uiStateSiswa.detailSiswa.toSiswa())
         }
     }
+
 }
 data class UIStateSiswa(
     val detailSiswa: DetailSiswa = DetailSiswa(),
     val isEntryValid: Boolean = false
+
 )
 
 data class DetailSiswa(
@@ -40,6 +42,13 @@ data class DetailSiswa(
     val alamat: String = "",
     val telpon: String = ""
 )
+fun Siswa.toUiStateSiswa(isEntryValid: Boolean = false): UIStateSiswa {
+    return UIStateSiswa(
+        detailSiswa = this.toDetailSiswa(),
+        isEntryValid = isEntryValid
+    )
+}
+
 
 fun DetailSiswa.toSiswa(): Siswa = Siswa(
     id = id,
