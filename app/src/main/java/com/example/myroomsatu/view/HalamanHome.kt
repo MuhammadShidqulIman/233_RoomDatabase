@@ -45,8 +45,10 @@ import com.example.myroomsatu.viewmodel.provider.PenyediaViewModel
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
     navigateToItemDetail: (Int) -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
+
 ){
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
